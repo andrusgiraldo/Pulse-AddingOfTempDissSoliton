@@ -346,7 +346,7 @@ x = linspace(-5,100,100);
 % Plotting panel (a)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(31); clf; hold on;
-plot(tauPD+2*perPD,aPD,'linewidth',5, 'Color', [1. 0. 0.]);
+plot(tauPD,aPD,'linewidth',5, 'Color', [1. 0. 0.]);
 plot(x, -1.5007*x./x, '--','linewidth',3, 'Color', [0.5 0.5 0.5]);
 hold off;
 xlabel('$\tau$','interpreter','latex')
@@ -363,7 +363,7 @@ hgexport(gcf, ['./Figures/FigurePDComputation_a.eps'], hgexport('factorystyle'),
 % Plotting panel (b)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(32); clf; hold on;
-plot(tauPD,aPD,'linewidth',5, 'Color', [1. 0.0 0.0]);
+plot(tauPD-2*perPD,aPD,'linewidth',5, 'Color', [1. 0.0 0.0]);
 plot(x, -1.5*x./x, ' --','linewidth',3, 'Color', [0.5 0.5 0.5]);
 
 % Ploting the homoclinic here!
