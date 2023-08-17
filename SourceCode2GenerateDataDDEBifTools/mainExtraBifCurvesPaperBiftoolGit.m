@@ -6,7 +6,7 @@ clc
 clear all;
 close all;
 
-% For this set of script to run, please download and use the latest commint
+% For this set of script to run, please download and use the latest commit
 % of DDE BifTools from GitHub
 
 % addpath('../../../../MATLAB/dde_biftool-git/ddebiftool/',...
@@ -16,9 +16,15 @@ close all;
 %         '../../../../MATLAB/dde_biftool-git/ddebiftool_extra_nmfm/',...
 %         '../../../../MATLAB/dde_biftool-git/ddebiftool_extra_rotsym'); 
 
+addpath('../../../Dropbox/Work/Research/MATLAB/ddebiftool-git/ddebiftool/',...
+        '../../../Dropbox/Work/Research/MATLAB/ddebiftool-git/demos/phase_oscillator',...
+        '../../../Dropbox/Work/Research/MATLAB/ddebiftool-git/ddebiftool_extra_psol/',...
+        '../../../Dropbox/Work/Research/MATLAB/ddebiftool-git/ddebiftool_utilities/',...
+        '../../../Dropbox/Work/Research/MATLAB/ddebiftool-git/ddebiftool_extra_nmfm/',...
+        '../../../Dropbox/Work/Research/MATLAB/ddebiftool-git/ddebiftool_extra_rotsym');
 
 % Adding a collection of functions that are used to initialize different
-% variables for DDE BifTools
+% variables for DDE-Biftool
 addpath('./personalizeLibrary')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -129,7 +135,7 @@ perbranch3.method.continuation.plot=1; % don't plot prgress
 hold off;    
     
 %set up Psol branch in mu_tilde
-[perbranch4,suc]=SetupPsolFrom_psol(funcs,perbranch3,length(perbranch3.point),...
+[perbranch4,~]=SetupPsolFrom_psol(funcs,perbranch3,length(perbranch3.point),...
     'contpar',ind.mu_tilde,'step', 1e-3,'max_step', [0, 1.0],'min_bound', [], 'max_bound', [ind.mu_tilde, 0.03]);
     
 % continue Psol to mu=0.2
@@ -163,12 +169,10 @@ indpd=indpd(end); % many points founds pick first
     
        
 % Now set up the PD curve 
-% it is possible to switch back to negative delay here
-perbranch5.point(indpd).parameter(ind.tau)=perbranch5.point(indpd).parameter(ind.tau)-2*perbranch5.point(indpd).period;
 [pdfuncs1,pdbranch1,suc]=SetupPeriodDoubling(funcs,perbranch5,indpd,...
     'contpar', [ind.tau ind.a], 'dir', ind.a, 'step', 1e-2,...
-    'max_step', [0, 0.01; ind.a, 0.1; ind.tau, 0.01],'min_bound', [ind.tau, -0.75],...
-    'max_bound', [ind.a -1.2], 'locate_trivial', @(p)[-1,1],...
+    'max_step', [0, 0.1; ind.a, 0.1; ind.tau, 1.],'min_bound', [],...
+    'max_bound', [ind.a -1.2; ind.tau 35.], 'locate_trivial', @(p)[-1,1],...
     'newton_nmon_iterations',5,'newton_max_iterations',10,...
     'matrix','sparse','eigmatrix','sparse','degree',11,'intervals',34);
 
@@ -176,12 +180,14 @@ perbranch5.point(indpd).parameter(ind.tau)=perbranch5.point(indpd).parameter(ind
 figure(9); clf; hold on;
 pdbranch1.method.continuation.plot=1; 
 [pdbranch1,s,f,r]=br_contn(pdfuncs1,pdbranch1,1000);
+pdbranch1 = br_rvers(pdbranch1);
+[pdbranch1,s,f,r]=br_contn(pdfuncs1,pdbranch1,1000);
 hold off;
     
 auxPDbranch = pdbranch1;   
 
 % Undocument the next line to save the variable
-%save('./DDEResults/SpecialPDBranchFig3','auxPDbranch')
+save('./DDEResults/SpecialPDBranchFig3','auxPDbranch')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Extra FOLD Curve in Fig 5
@@ -256,7 +262,7 @@ hold off;
 auxFOLDbranch = foldbranch1;   
 
 % Undocument the next line to save the variable
-%save('./DDEResults/SpecialFOLDBranchFig5','auxFOLDbranch')
+save('./DDEResults/SpecialFOLDBranchFig5','auxFOLDbranch')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Extra FOLD Curve in Fig 12 (emanating from B2)
@@ -364,7 +370,7 @@ hold off;
 auxFOLDbranch = foldbranch1; 
 
 % Undocument the next line to save the variable
-%save('./DDEResults/SpecialFOLDBranchFig12','auxFOLDbranch')
+save('./DDEResults/SpecialFOLDBranchFig12','auxFOLDbranch')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Extra period-doubled FOLD Curve in Fig 10(h) 
@@ -492,7 +498,7 @@ hold off;
 auxDoublebranch = dperbranch1;   
 
 % Undocument the next line to save the variable
-%save('./DDEResults/SpecialDoubleBranchFig10(h)','auxDoublebranch')
+save('./DDEResults/SpecialDoubleBranchFig10(h)','auxDoublebranch')
   
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -639,7 +645,7 @@ hold off;
 auxFOLDbranch = foldbranch1;   
 
 % Undocument the next line to save the variable
-%save('./DDEResults/SpecialFOLDBranchFig8','auxFOLDbranch')
+save('./DDEResults/SpecialFOLDBranchFig8','auxFOLDbranch')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Figure 7 panel (h)
@@ -727,4 +733,4 @@ hold off;
      
 auxPerbranch = perbranch4;
 % Undocument the next line to save the variable
-%save('./DDEResults/SpecialPerBranchFig7(h)','auxPerbranch')
+save('./DDEResults/SpecialPerBranchFig7(h)','auxPerbranch')
